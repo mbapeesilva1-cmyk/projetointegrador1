@@ -6,16 +6,6 @@
 <title>Protótipo do Painel de Evasão</title>
 <meta name="description" content="Protótipo funcional do painel de evasão escolar em São Paulo, em estágio inicial de desenvolvimento (~33%).">
 <style>
-/* ==========================================================================
-   PROTÓTIPO — versão 0.3
-   --------------------------------------------------------------------------
-   Estilo propositalmente básico. Fonte do sistema, sem biblioteca, sem
-   sombra, sem canto arredondado, sem ícone. As barras dos gráficos são
-   <div> com largura em porcentagem, não SVG.
-
-   O objetivo desta versão é validar a ESTRUTURA da página e provar que o
-   dado tratado chega até a tela. O acabamento visual vem depois.
-   ========================================================================== */
 
 * { box-sizing: border-box; }
 
@@ -42,7 +32,6 @@ p  { margin: 0 0 10px; }
 
 a { color: #2d6a4f; }
 
-/* --- Aviso de protótipo -------------------------------------------------- */
 .aviso {
   background: #fff8dc;
   border-bottom: 2px solid #d4b106;
@@ -53,7 +42,6 @@ a { color: #2d6a4f; }
 
 .aviso strong { color: #7a6100; }
 
-/* --- Cabeçalho ----------------------------------------------------------- */
 .cabecalho {
   border-bottom: 2px solid #2d6a4f;
   padding: 20px 0 14px;
@@ -70,7 +58,6 @@ a { color: #2d6a4f; }
 
 .subtitulo { color: #555; font-size: 13px; margin: 0; }
 
-/* --- Filtros ------------------------------------------------------------- */
 .filtros {
   border: 1px solid #ccc;
   background: #f5f5f5;
@@ -87,7 +74,6 @@ a { color: #2d6a4f; }
   margin-left: 4px;
 }
 
-/* --- Indicadores --------------------------------------------------------- */
 .indicadores { display: flex; flex-wrap: wrap; gap: 10px; }
 
 .indicador {
@@ -100,7 +86,6 @@ a { color: #2d6a4f; }
 
 .indicador .valor { font-size: 26px; font-weight: bold; margin-top: 2px; }
 
-/* --- Gráfico de barras em CSS -------------------------------------------- */
 .grafico { border: 1px solid #ccc; padding: 12px; }
 
 .barra-linha { display: flex; align-items: center; margin-bottom: 6px; }
@@ -114,7 +99,6 @@ a { color: #2d6a4f; }
 
 .barra-trilho { flex: 1; background: #eee; height: 20px; }
 
-/* display:block é obrigatório: <span> é inline, e largura não se aplica a
    elemento inline — sem isto a barra não aparece. */
 .barra { display: block; background: #2d6a4f; height: 100%; }
 
@@ -127,7 +111,6 @@ a { color: #2d6a4f; }
 
 .legenda-eixo { font-size: 11px; color: #777; margin-top: 8px; }
 
-/* --- Tabela -------------------------------------------------------------- */
 table { border-collapse: collapse; width: 100%; font-size: 13px; }
 
 th, td { border: 1px solid #ccc; padding: 5px 8px; text-align: left; }
@@ -136,7 +119,6 @@ th { background: #eee; font-size: 12px; }
 
 td.n { text-align: right; }
 
-/* --- Área não implementada ----------------------------------------------- */
 .pendente {
   border: 2px dashed #bbb;
   background: #fafafa;
@@ -155,7 +137,6 @@ td.n { text-align: right; }
   font-size: 13px;
 }
 
-/* --- Status do projeto --------------------------------------------------- */
 .progresso-trilho {
   border: 1px solid #999;
   height: 22px;
@@ -178,7 +159,6 @@ td.n { text-align: right; }
 .andamento { color: #9a6700; }
 .planejado { color: #888; }
 
-/* --- Rodapé -------------------------------------------------------------- */
 .rodape {
   margin-top: 32px;
   padding-top: 12px;
@@ -207,9 +187,6 @@ td.n { text-align: right; }
     </p>
   </div>
 
-  <!-- ====================================================================
-       Filtros — só dois, por enquanto
-       ==================================================================== -->
   <div class="filtros">
     <label>
       Ano:
@@ -232,9 +209,6 @@ td.n { text-align: right; }
     </label>
   </div>
 
-  <!-- ====================================================================
-       Indicadores
-       ==================================================================== -->
   <h2>Indicadores do ano selecionado</h2>
 
   <div class="indicadores">
@@ -252,19 +226,13 @@ td.n { text-align: right; }
     </div>
   </div>
 
-  <!-- ====================================================================
-       Gráfico
-       ==================================================================== -->
   <h2>Taxa de abandono por ano</h2>
 
   <div class="grafico">
     <div id="barras"></div>
     <p class="legenda-eixo" id="legenda-grafico"></p>
   </div>
-
-  <!-- ====================================================================
-       Tabela
-       ==================================================================== -->
+>
   <h2>Tabela de dados</h2>
 
   <table>
@@ -277,11 +245,7 @@ td.n { text-align: right; }
       </tr>
     </thead>
     <tbody id="tabela"></tbody>
-  </table>
-
-  <!-- ====================================================================
-       O que ainda não existe
-       ==================================================================== -->
+  </table
   <h2>Áreas ainda não implementadas</h2>
 
   <div class="pendente">
@@ -296,9 +260,6 @@ td.n { text-align: right; }
     </ul>
   </div>
 
-  <!-- ====================================================================
-       Status
-       ==================================================================== -->
   <h2>Status do desenvolvimento</h2>
 
   <div class="progresso-trilho">
@@ -356,112 +317,6 @@ td.n { text-align: right; }
 </div>
 
 <script>
-/* ==========================================================================
-   Protótipo — lógica mínima.
-   Recorte dos dados já tratados: São Paulo, todas as redes, 2019 a 2023.
-   Na versão final estes valores vêm de um arquivo gerado pelo pipeline.
-   ========================================================================== */
-
-var DADOS = {
-  ef_total: {
-    2019: { aprovacao: 97.5, reprovacao: 2.1, abandono: 0.4 },
-    2020: { aprovacao: 99.3, reprovacao: 0.5, abandono: 0.2 },
-    2021: { aprovacao: 98.6, reprovacao: 0.8, abandono: 0.6 },
-    2022: { aprovacao: 98.1, reprovacao: 1.5, abandono: 0.4 },
-    2023: { aprovacao: 98.5, reprovacao: 1.1, abandono: 0.4 }
-  },
-  fund_ai: {
-    2019: { aprovacao: 98.5, reprovacao: 1.4, abandono: 0.1 },
-    2020: { aprovacao: 99.5, reprovacao: 0.4, abandono: 0.1 },
-    2021: { aprovacao: 98.9, reprovacao: 0.7, abandono: 0.4 },
-    2022: { aprovacao: 98.7, reprovacao: 1.1, abandono: 0.2 },
-    2023: { aprovacao: 99.1, reprovacao: 0.7, abandono: 0.2 }
-  },
-  fund_af: {
-    2019: { aprovacao: 96.2, reprovacao: 3.1, abandono: 0.7 },
-    2020: { aprovacao: 99.1, reprovacao: 0.7, abandono: 0.2 },
-    2021: { aprovacao: 98.2, reprovacao: 0.9, abandono: 0.9 },
-    2022: { aprovacao: 97.3, reprovacao: 1.9, abandono: 0.8 },
-    2023: { aprovacao: 97.7, reprovacao: 1.6, abandono: 0.7 }
-  },
-  medio: {
-    2019: { aprovacao: 92.3, reprovacao: 5.7, abandono: 2.0 },
-    2020: { aprovacao: 97.8, reprovacao: 1.8, abandono: 0.4 },
-    2021: { aprovacao: 94.8, reprovacao: 1.9, abandono: 3.3 },
-    2022: { aprovacao: 91.4, reprovacao: 5.3, abandono: 3.3 },
-    2023: { aprovacao: 93.3, reprovacao: 3.9, abandono: 2.8 }
-  }
-};
-
-var NOMES_ETAPA = {
-  ef_total: "Ensino Fundamental",
-  fund_ai: "Anos Iniciais",
-  fund_af: "Anos Finais",
-  medio: "Ensino Médio"
-};
-
-var ANOS = [2019, 2020, 2021, 2022, 2023];
-
-function formatar(valor) {
-  return valor.toFixed(1).replace(".", ",") + "%";
-}
-
-function atualizar() {
-  var ano = document.getElementById("ano").value;
-  var etapa = document.getElementById("etapa").value;
-  var serie = DADOS[etapa];
-  var atual = serie[ano];
-
-  // Indicadores
-  document.getElementById("kpi-aprovacao").textContent = formatar(atual.aprovacao);
-  document.getElementById("kpi-reprovacao").textContent = formatar(atual.reprovacao);
-  document.getElementById("kpi-abandono").textContent = formatar(atual.abandono);
-
-  // Gráfico: barras proporcionais ao maior valor da série
-  var maior = 0;
-  for (var i = 0; i < ANOS.length; i++) {
-    if (serie[ANOS[i]].abandono > maior) maior = serie[ANOS[i]].abandono;
-  }
-  if (maior === 0) maior = 1;
-
-  var html = "";
-  for (var j = 0; j < ANOS.length; j++) {
-    var a = ANOS[j];
-    var v = serie[a].abandono;
-    var largura = (v / maior) * 100;
-    var destaque = String(a) === String(ano) ? "#1b4332" : "#2d6a4f";
-    html +=
-      '<div class="barra-linha">' +
-        '<span class="ano">' + a + "</span>" +
-        '<span class="barra-trilho">' +
-          '<span class="barra" style="width:' + largura + "%;background:" + destaque + '"></span>' +
-        "</span>" +
-        '<span class="valor">' + formatar(v) + "</span>" +
-      "</div>";
-  }
-  document.getElementById("barras").innerHTML = html;
-  document.getElementById("legenda-grafico").textContent =
-    "Etapa: " + NOMES_ETAPA[etapa] + ". A barra escura é o ano selecionado.";
-
-  // Tabela
-  var linhas = "";
-  for (var k = 0; k < ANOS.length; k++) {
-    var an = ANOS[k];
-    var d = serie[an];
-    linhas +=
-      "<tr>" +
-        "<td>" + an + "</td>" +
-        '<td class="n">' + formatar(d.aprovacao) + "</td>" +
-        '<td class="n">' + formatar(d.reprovacao) + "</td>" +
-        '<td class="n">' + formatar(d.abandono) + "</td>" +
-      "</tr>";
-  }
-  document.getElementById("tabela").innerHTML = linhas;
-}
-
-document.getElementById("ano").addEventListener("change", atualizar);
-document.getElementById("etapa").addEventListener("change", atualizar);
-atualizar();
 </script>
 
 </body>
